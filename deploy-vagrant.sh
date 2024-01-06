@@ -1,16 +1,21 @@
 #!/bin/bash
-#nginxのプロセスが起動している数を表示
-echo "nginx process" | tr '\n' ' '
-pgrep nginx |wc -l
 
-SERVICES=`pgrep nginx |wc -l`
+#Vagrantfileが置いてあるディレクトリへ移動
+cd /Users/apple/vagrant/dev
 
-#nginxのプロセスが起動していない場合は起動させる
-if [ "$SERVICES" -eq 0 ]; then
-  echo "nginx is not running"
-  systemctl start nginx
+#ヘルプ関数定義
+function help () {
+echo "下記のようにstatusを指定して実行してください。
+(例) ./deploy-vagrant.sh  status,up,suspend"
+}
 
-else
-  echo "nginx is running"
+#引数を変数に代入
+vagrant_options=$1
+
+#引数が空の場合、help関数を実行。それ以外であれば引数をvagrantコマンドのオプションとして実行。
+if [ -z ${1} ]; then
+help
+
+else vagrant $vagrant_options
 
 fi
